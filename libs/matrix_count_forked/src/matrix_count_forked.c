@@ -1,4 +1,4 @@
-#include "matrix_count.h"
+#include "matrix_count_forked.h"
 
 Matrix *create_matrix(const size_t rows, const size_t cols) {
     Matrix *mat = (Matrix *) calloc(1, sizeof(Matrix));
@@ -15,7 +15,7 @@ Matrix *create_matrix(const size_t rows, const size_t cols) {
     mat->cols = cols;
 
     for (size_t i = 0; i < rows * cols; ++i) {
-        mat->matrix[i] = (double)rand() / RAND_MAX * 10;
+        mat->matrix[i] = (double) rand() / RAND_MAX * 10;
     }
 
     return mat;
@@ -45,17 +45,6 @@ int print_matrix(Matrix *mat, FILE *ptr) {
 int cols_sum(Matrix *mat) {
     if (mat == NULL) {
         return -1;
-    }
-
-    mat->cols_sum = (double *) calloc(mat->cols, sizeof(double));
-
-    double col_sum = 0;
-    for (size_t i = 0; i < mat->cols; ++i) {
-        for (size_t j = 0; j < mat->rows; ++j) {
-            col_sum += mat->matrix[j * mat->cols + i];
-        }
-        mat->cols_sum[i] = col_sum;
-        col_sum = 0;
     }
 
     return 0;
