@@ -20,7 +20,44 @@ Matrix *create_matrix(const size_t rows, const size_t cols) {
     mat->cols = cols;
 
     for (size_t i = 0; i < rows * cols; ++i) {
-        mat->matrix[i] = (double)rand() / RAND_MAX * 10;
+        mat->matrix[i] = (double) rand() / RAND_MAX * 10;
+    }
+
+    return mat;
+}
+
+Matrix *create_matrix_from_file(FILE *ptr) {
+    if (ptr == NULL) {
+        return NULL;
+    }
+
+    Matrix *mat = (Matrix *) calloc(1, sizeof(Matrix));
+    if (mat == NULL) {
+        return NULL;
+    }
+    if (fscanf(ptr, "%zu %zu", &mat->rows, &mat->cols) != 2) {
+        free(mat);
+        return NULL;
+    }
+    mat->matrix = (double *) calloc(mat->rows * mat->cols, sizeof(double));
+    if (mat->matrix == NULL) {
+        free(mat);
+        return NULL;
+    }
+    mat->cols_sum = (double *) calloc(mat->cols, sizeof(double));
+    if (mat->cols_sum == NULL) {
+        free(mat->matrix);
+        free(mat);
+        return NULL;
+    }
+
+    for (size_t i = 0; i < mat->rows; i++) {
+        for (size_t j = 0; j < mat->cols; j++) {
+            if (fscanf(ptr, "%lf", &mat->matrix[i * mat->cols + j]) != 1) {
+                delete_matrix(mat);
+                return NULL;
+            }
+        }
     }
 
     return mat;
@@ -46,8 +83,6 @@ int cols_sum(Matrix *mat) {
     if (mat == NULL) {
         return -1;
     }
-
-    mat->cols_sum = (double *) calloc(mat->cols, sizeof(double));
 
     double col_sum = 0;
     for (size_t i = 0; i < mat->cols; ++i) {
