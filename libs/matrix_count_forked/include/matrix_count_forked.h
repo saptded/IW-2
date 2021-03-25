@@ -6,6 +6,11 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/wait.h>
+#include <sys/msg.h>
+#include <stdatomic.h>
+#include <sys/ipc.h>
+#include <sys/types.h>
+
 
 typedef struct Matrix {
     double *matrix;
