@@ -1,0 +1,33 @@
+name: CI
+on: [ push ]
+
+jobs:
+  build:
+
+    name: ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install references
+        run: sudo apt-get install libgtest-dev -y && cd /usr/src/gtest && sudo cmake CMakeLists.txt && sudo make && cd lib && sudo cp *.a /usr/lib && sudo apt-get install -y cppcheck && sudo apt-get install valgrind && sudo apt-get install -y lcov && sudo apt-get install -y gcovr
+
+      - name: build
+        run: mkdir build && cd build && cmake .. && make
+
+      - name: static analys and linters
+        run: cppcheck -q --enable=all --inconclusive --platform=unix64 --suppress=missingIncludeSystem ./project ./gtests
+
+      - name: tests
+        run: ./build/tests && ./build/tests_forked && ./build/comparator
+
+      - name: valgrind
+        run: valgrind --tool=memcheck --leak-check=full -s ./build/gtests
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.txt
+          flags: unittests

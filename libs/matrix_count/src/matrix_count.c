@@ -26,26 +26,34 @@ Matrix *create_matrix(const size_t rows, const size_t cols) {
     return mat;
 }
 
-Matrix *create_matrix_from_file(FILE *ptr) {
+Matrix *create_matrix_from_file(const char *file_path) {
+    if (file_path == NULL) {
+        return NULL;
+    }
+    FILE *ptr = fopen(file_path, "r");
     if (ptr == NULL) {
         return NULL;
     }
 
     Matrix *mat = (Matrix *) calloc(1, sizeof(Matrix));
     if (mat == NULL) {
+        fclose(ptr);
         return NULL;
     }
     if (fscanf(ptr, "%zu %zu", &mat->rows, &mat->cols) != 2) {
+        fclose(ptr);
         free(mat);
         return NULL;
     }
     mat->matrix = (double *) calloc(mat->rows * mat->cols, sizeof(double));
     if (mat->matrix == NULL) {
+        fclose(ptr);
         free(mat);
         return NULL;
     }
     mat->cols_sum = (double *) calloc(mat->cols, sizeof(double));
     if (mat->cols_sum == NULL) {
+        fclose(ptr);
         free(mat->matrix);
         free(mat);
         return NULL;
@@ -60,11 +68,17 @@ Matrix *create_matrix_from_file(FILE *ptr) {
         }
     }
 
+    fclose(ptr);
     return mat;
 }
 
-int print_matrix(Matrix *mat, FILE *ptr) {
-    if (mat == NULL || ptr == NULL) {
+int print_matrix(const Matrix *mat, const char *file_path) {
+    if (mat == NULL || file_path == NULL) {
+        return -1;
+    }
+
+    FILE *ptr = fopen(file_path, "w+");
+    if (ptr == NULL) {
         return -1;
     }
 
@@ -76,6 +90,7 @@ int print_matrix(Matrix *mat, FILE *ptr) {
         fprintf(ptr, "\n");
     }
 
+    fclose(ptr);
     return 0;
 }
 
@@ -96,8 +111,13 @@ int cols_sum(Matrix *mat) {
     return 0;
 }
 
-int print_cols_sum(Matrix *mat, FILE *ptr) {
-    if (mat == NULL || ptr == NULL) {
+int print_cols_sum(const Matrix *mat, const char *file_path) {
+    if (mat == NULL || file_path == NULL) {
+        return -1;
+    }
+
+    FILE *ptr = fopen(file_path, "w+");
+    if (ptr == NULL) {
         return -1;
     }
 
@@ -105,6 +125,7 @@ int print_cols_sum(Matrix *mat, FILE *ptr) {
         fprintf(ptr, "%3.2lf\n", mat->cols_sum[i]);
     }
 
+    fclose(ptr);
     return 0;
 }
 
