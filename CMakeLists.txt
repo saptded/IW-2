@@ -15,13 +15,14 @@ target_include_directories(matrix_count PUBLIC libs/matrix_count/include)
 add_library(matrix_count_forked SHARED ${SOURCES_FOR_SHARED})
 target_include_directories(matrix_count_forked PUBLIC libs/matrix_count_forked/include)
 
-add_executable(IW_2 main.c)
-target_link_libraries(IW_2 matrix_count)
-
-add_executable(IW_2_forked main_forked.c)
-target_link_libraries(IW_2_forked matrix_count_forked)
+#add_executable(IW_2 main.c)
+#target_link_libraries(IW_2 matrix_count)
+#
+#add_executable(IW_2_forked main_forked.c)
+#target_link_libraries(IW_2_forked matrix_count_forked)
 
 find_package(GTest REQUIRED)
+
 add_executable(tests tests/tests.cpp)
 target_link_libraries(tests GTest::gtest matrix_count)
 
