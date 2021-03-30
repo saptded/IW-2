@@ -1,21 +1,13 @@
 #include "matrix_count.h"
 
-
 int main() {
-    Matrix *mat = create_matrix_from_file("../matrix_data/matrix_3_2.txt");
+    Matrix *mat = create_matrix(10000, 5000);
     if (mat == NULL) {
         return -1;
     }
 
-    if (cols_sum(mat) == -1) {
-        return -1;
-    }
-
-    if (print_cols_sum(mat, "../matrix_data/matrix.out") == -1) {
-        return -1;
-    }
+    print_matrix(mat, "../matrix_data/matrix_10000_5000.txt");
 
     delete_matrix(mat);
-
     return 0;
 }
