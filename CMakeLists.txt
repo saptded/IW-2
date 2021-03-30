@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.17)
-project(IW_2 C)
+project(IW_2 C CXX)
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wpedantic")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wpedantic --coverage")
+set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wpedantic --coverage")
 
 set(SOURCES_FOR_STATIC libs/matrix_count/src/matrix_count.c)
 set(SOURCES_FOR_SHARED libs/matrix_count_forked/src/matrix_count_forked.c)
@@ -18,3 +20,13 @@ target_link_libraries(IW_2 matrix_count)
 
 add_executable(IW_2_forked main_forked.c)
 target_link_libraries(IW_2_forked matrix_count_forked)
+
+find_package(GTest REQUIRED)
+add_executable(tests tests/tests.cpp)
+target_link_libraries(tests GTest::gtest matrix_count)
+
+add_executable(tests_forked tests/tests_forked.cpp)
+target_link_libraries(tests_forked GTest::gtest matrix_count_forked)
+
+add_executable(comparator tests/comparator.cpp)
+target_link_libraries(comparator GTest::gtest)
