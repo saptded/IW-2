@@ -13,6 +13,8 @@ TEST(create_matrix, create_matrix) {
         }
     }
     EXPECT_TRUE(mat->cols_sum != nullptr);
+
+    delete_matrix(mat);
 }
 
 TEST(create_matrix_form_file, create_matrix_form_file) {
@@ -25,6 +27,8 @@ TEST(create_matrix_form_file, create_matrix_form_file) {
         }
     }
     EXPECT_TRUE(mat->cols_sum != nullptr);
+
+    delete_matrix(mat);
 }
 
 TEST(print_matrix, print_matrix) {
@@ -43,14 +47,19 @@ TEST(print_matrix, print_matrix) {
                 std::fabs(mat_exp->matrix[i * mat_exp->cols + j] - mat_got->matrix[i * mat_got->cols + j]) < 0.01);
         }
     }
+
+    delete_matrix(mat_exp);
+    delete_matrix(mat_got);
 }
 
 TEST(cols_sum, cols_sum) {
     Matrix *mat = create_matrix_from_file("../matrix_data/matrix_3_2.txt");
     cols_sum(mat);
 
-    EXPECT_EQ(mat->cols_sum[0], 25.35);
-    EXPECT_EQ(mat->cols_sum[1], 13.90);
+    EXPECT_TRUE(fabs(mat->cols_sum[0] - 25.35) < 0.01);
+    EXPECT_TRUE(fabs(mat->cols_sum[1] - 13.90) < 0.01);
+
+    delete_matrix(mat);
 }
 
 //TEST(print_cols_sum, print_cols_sum) {

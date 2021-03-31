@@ -23,7 +23,7 @@ jobs:
         run: cd build && ./tests && ./tests_forked && ./comparator
 
       - name: valgrind
-        run: valgrind --tool=memcheck --leak-check=full -s ./build/gtests
+        run: cd build && valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all -s -q ./tests ./tests_forked
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1

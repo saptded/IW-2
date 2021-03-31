@@ -5,23 +5,31 @@ Matrix *create_matrix(const size_t rows, const size_t cols) {
     if (mat == NULL) {
         return NULL;
     }
-    mat->matrix = (double *) calloc(rows * cols, sizeof(double));
+
+    mat->rows = rows;
+    mat->cols = cols;
+    mat->matrix = (double *) mmap(NULL,
+                                  sizeof(double) * mat->cols * mat->rows,
+                                  PROT_READ | PROT_WRITE,
+                                  MAP_SHARED | MAP_ANONYMOUS,
+                                  0,
+                                  0);
     if (mat->matrix == NULL) {
         free(mat);
         return NULL;
     }
-    mat->cols_sum = (double *) calloc(mat->cols, sizeof(double));
+    for (size_t i = 0; i < rows * cols; ++i) {
+        mat->matrix[i] = (double) rand() / RAND_MAX * 10;
+    }
+
+    mat->cols_sum =
+        (double *) mmap(NULL, sizeof(double) * mat->cols, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, 0, 0);
     if (mat->cols_sum == NULL) {
         free(mat->matrix);
         free(mat);
         return NULL;
     }
-    mat->rows = rows;
-    mat->cols = cols;
 
-    for (size_t i = 0; i < rows * cols; ++i) {
-        mat->matrix[i] = (double) rand() / RAND_MAX * 10;
-    }
 
     return mat;
 }
