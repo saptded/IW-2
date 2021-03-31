@@ -1,8 +1,6 @@
 #include "matrix_count.h"
 
-#include <errno.h>
 #include <string.h>
-
 
 Matrix *create_matrix(const size_t rows, const size_t cols) {
     Matrix *mat = (Matrix *) calloc(1, sizeof(Matrix));
@@ -46,11 +44,13 @@ Matrix *create_matrix_from_file(const char *file_path) {
         fclose(ptr);
         return NULL;
     }
+
     if (fscanf(ptr, "%zu %zu", &mat->rows, &mat->cols) != 2) {
         fclose(ptr);
         free(mat);
         return NULL;
     }
+
     mat->matrix = (double *) calloc(mat->rows * mat->cols, sizeof(double));
     if (mat->matrix == NULL) {
         fclose(ptr);
@@ -124,7 +124,6 @@ int print_cols_sum(const Matrix *mat, const char *file_path) {
 
     FILE *ptr = fopen(file_path, "w+");
 
-    printf("%s", strerror(errno));
     if (ptr == NULL) {
         return -1;
     }
