@@ -46,11 +46,13 @@ Matrix *create_matrix_from_file(const char *file_path) {
         fclose(ptr);
         return NULL;
     }
+
     if (fscanf(ptr, "%zu %zu", &mat->rows, &mat->cols) != 2) {
         fclose(ptr);
         free(mat);
         return NULL;
     }
+
     mat->matrix = (double *) calloc(mat->rows * mat->cols, sizeof(double));
     if (mat->matrix == NULL) {
         fclose(ptr);

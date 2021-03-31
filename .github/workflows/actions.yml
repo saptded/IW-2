@@ -20,7 +20,7 @@ jobs:
         run: cppcheck -q --enable=all --platform=unix64 --check-config --suppress=missingIncludeSystem libs tests
 
       - name: tests
-        run: cd build && ./tests && ./tests_forked && ./comparator
+        run: cd build && ./tests && ./tests_forked && ./comparator && lcov -t "IW_2" -o coverage.txt -c -d . && cp coverage.txt ../
 
       - name: valgrind
         run: cd build && valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all -s -q ./tests ./tests_forked
