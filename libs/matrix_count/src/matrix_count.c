@@ -1,23 +1,29 @@
 #include "matrix_count.h"
 
+#include <errno.h>
+#include <string.h>
+
+
 Matrix *create_matrix(const size_t rows, const size_t cols) {
     Matrix *mat = (Matrix *) calloc(1, sizeof(Matrix));
     if (mat == NULL) {
         return NULL;
     }
+
     mat->matrix = (double *) calloc(rows * cols, sizeof(double));
     if (mat->matrix == NULL) {
         free(mat);
         return NULL;
     }
+    mat->rows = rows;
+    mat->cols = cols;
+
     mat->cols_sum = (double *) calloc(mat->cols, sizeof(double));
     if (mat->cols_sum == NULL) {
         free(mat->matrix);
         free(mat);
         return NULL;
     }
-    mat->rows = rows;
-    mat->cols = cols;
 
     for (size_t i = 0; i < rows * cols; ++i) {
         mat->matrix[i] = (double) rand() / RAND_MAX * 10;
@@ -117,12 +123,14 @@ int print_cols_sum(const Matrix *mat, const char *file_path) {
     }
 
     FILE *ptr = fopen(file_path, "w+");
+
+    printf("%s", strerror(errno));
     if (ptr == NULL) {
         return -1;
     }
 
     for (size_t i = 0; i < mat->cols; ++i) {
-        fprintf(ptr, "%3.2lf\n", mat->cols_sum[i]);
+        fprintf(ptr, "%3.2lf\n", *(mat->cols_sum + i));
     }
 
     fclose(ptr);

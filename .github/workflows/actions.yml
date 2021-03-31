@@ -16,7 +16,7 @@ jobs:
       - name: build
         run: mkdir build && cd build && cmake .. && make && cd ../
 
-      - name: static analys and linters
+      - name: static analys
         run: cppcheck -q --enable=all --platform=unix64 --check-config --suppress=missingIncludeSystem libs tests
 
       - name: tests
